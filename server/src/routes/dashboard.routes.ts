@@ -8,12 +8,10 @@ router.get("/", authMiddleware, async (req: AuthRequest, res) => {
   try {
     const userId = req.userId as string;
 
-    // How many workspaces am I in?
     const workspaceCount = await prisma.workspaceMember.count({
       where: { userId },
     });
 
-    // Tasks assigned to me, grouped by status
     const myTasks = await prisma.task.findMany({
       where: { assigneeId: userId },
       include: {
@@ -29,7 +27,6 @@ router.get("/", authMiddleware, async (req: AuthRequest, res) => {
       DONE: myTasks.filter((t) => t.status === "DONE").length,
     };
 
-    // My 5 most urgent/soonest tasks that aren't done yet
     const upcomingTasks = myTasks
       .filter((t) => t.status !== "DONE")
       .slice(0, 5);

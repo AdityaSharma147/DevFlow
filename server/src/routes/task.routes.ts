@@ -5,14 +5,12 @@ import { getWorkspaceRole } from "../lib/permissions";
 
 const router = Router();
 
-// Helper: get a user's effective role for a project (via its workspace)
 async function getProjectRole(userId: string, projectId: string) {
   const project = await prisma.project.findUnique({ where: { id: projectId } });
   if (!project) return null;
   return getWorkspaceRole(userId, project.workspaceId);
 }
 
-// Create a task
 router.post(
   "/projects/:projectId/tasks",
   authMiddleware,
@@ -61,7 +59,6 @@ router.post(
   },
 );
 
-// List tasks in a project
 router.get(
   "/projects/:projectId/tasks",
   authMiddleware,
@@ -93,7 +90,6 @@ router.get(
   },
 );
 
-// Update a task (title, description, status, priority, dueDate, labels, assignee)
 router.patch(
   "/tasks/:taskId",
   authMiddleware,
@@ -152,7 +148,6 @@ router.patch(
   },
 );
 
-// Delete a task
 router.delete(
   "/tasks/:taskId",
   authMiddleware,

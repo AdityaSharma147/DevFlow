@@ -14,7 +14,6 @@ router.get("/", authMiddleware, async (req: AuthRequest, res) => {
 
     const userId = req.userId as string;
 
-    // Only search within workspaces the user actually belongs to
     const myWorkspaceIds = (
       await prisma.workspaceMember.findMany({
         where: { userId },
