@@ -2,7 +2,7 @@
 
 A full-stack team project management platform — think a lightweight Linear or Jira. Built to explore real-world authentication, role-based authorization, relational data modeling, and AI-assisted workflows from the ground up.
 
-**Live demo:** _coming soon_
+**Live demo:** [devflow-flame-one.vercel.app](https://devflow-flame-one.vercel.app)
 
 ## Features
 
