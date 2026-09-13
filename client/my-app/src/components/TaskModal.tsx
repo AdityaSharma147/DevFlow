@@ -16,19 +16,29 @@ type Task = {
   status: string;
   priority: string;
   labels: string[];
+  projectId: string;
+  assignee: { id: string; name: string; email: string } | null;
 };
 
 type Props = {
   task: Task;
   onClose: () => void;
+  onTaskUpdated: () => void;
 };
 
-export default function TaskModal({ task, onClose }: Props) {
+type Member = {
+  id: string;
+  user: { id: string; name: string; email: string };
+};
+
+export default function TaskModal({ task, onClose, onTaskUpdated }: Props) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState("");
   const [posting, setPosting] = useState(false);
   const [error, setError] = useState("");
+  const [members, setMembers] = useState<Member[]>([]);
+  const [assigning, setAssigning] = useState(false);
 
   async function fetchComments() {
     try {
@@ -41,8 +51,30 @@ export default function TaskModal({ task, onClose }: Props) {
     }
   }
 
+  async function fetchMembers() {
+    try {
+      const res = await api.get(`/projects/${task.projectId}/members`);
+      setMembers(res.data.members);
+    } catch (err) {
+      console.error("Failed to fetch members:", err);
+    }
+  }
+
+  async function handleAssign(userId: string) {
+    setAssigning(true);
+    try {
+      await api.patch(`/tasks/${task.id}`, { assigneeId: userId || null });
+      onTaskUpdated();
+    } catch (err) {
+      console.error("Failed to assign task:", err);
+    } finally {
+      setAssigning(false);
+    }
+  }
+
   useEffect(() => {
     fetchComments();
+    fetchMembers();
   }, [task.id]);
 
   async function handlePostComment(e: React.SubmitEvent<HTMLFormElement>) {
@@ -94,6 +126,25 @@ export default function TaskModal({ task, onClose }: Props) {
               {label}
             </span>
           ))}
+        </div>
+
+        <div className="flex gap-2 mb-6">
+          <label className="block text-xs text-slate-400 mb-1">
+            Assigned to
+          </label>
+          <select
+            value={task.assignee?.id || ""}
+            onChange={(e) => handleAssign(e.target.value)}
+            disabled={assigning}
+            className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-white text-sm focus:outline-none focus:border-indigo-500"
+          >
+            <option value="">Unassigned</option>
+            {members.map((m) => (
+              <option key={m.user.id} value={m.user.id}>
+                {m.user.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <h3 className="text-sm font-semibold text-white mb-3">Comments</h3>

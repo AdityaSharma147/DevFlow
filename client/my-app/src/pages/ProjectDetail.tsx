@@ -12,6 +12,7 @@ type Task = {
   priority: "LOW" | "MEDIUM" | "HIGH" | "URGENT";
   labels: string[];
   assignee: { id: string; name: string; email: string } | null;
+  projectId: string;
 };
 
 const COLUMNS: { key: Task["status"]; label: string }[] = [
@@ -118,7 +119,6 @@ export default function ProjectDetail() {
   }
 
   async function updateTaskStatus(taskId: string, newStatus: Task["status"]) {
-    // Optimistic update: change the UI immediately, before the server responds
     setTasks((prev) =>
       prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t)),
     );
@@ -127,7 +127,7 @@ export default function ProjectDetail() {
       await api.patch(`/tasks/${taskId}`, { status: newStatus });
     } catch (err) {
       console.error("Failed to update task status:", err);
-      fetchTasks(); // revert to real state if the update failed
+      fetchTasks();
     }
   }
 
@@ -332,6 +332,7 @@ export default function ProjectDetail() {
           <TaskModal
             task={selectedTask}
             onClose={() => setSelectedTask(null)}
+            onTaskUpdated={fetchTasks}
           />
         )}
       </div>

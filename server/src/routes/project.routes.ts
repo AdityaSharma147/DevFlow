@@ -159,4 +159,42 @@ router.delete(
   },
 );
 
+router.get(
+  "/projects/:projectId/members",
+  authMiddleware,
+  async (req: AuthRequest, res) => {
+    try {
+      const projectId = req.params.projectId as string;
+
+      const project = await prisma.project.findUnique({
+        where: { id: projectId },
+      });
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      const role = await getWorkspaceRole(
+        req.userId as string,
+        project.workspaceId,
+      );
+      if (!role) {
+        return res
+          .status(403)
+          .json({ error: "You do not have access to this project" });
+      }
+
+      const members = await prisma.workspaceMember.findMany({
+        where: { workspaceId: project.workspaceId },
+        include: {
+          user: { select: { id: true, name: true, email: true } },
+        },
+      });
+
+      res.json({ members });
+    } catch (error) {
+      console.error("Get project members error:", error);
+      res.status(500).json({ error: "Something went wrong" });
+    }
+  },
+);
 export default router;
