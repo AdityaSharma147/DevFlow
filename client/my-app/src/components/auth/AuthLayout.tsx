@@ -9,13 +9,13 @@ type Props = {
 
 export default function AuthLayout({ title, subtitle, children }: Props) {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-slate-200 dark:bg-slate-950 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <Link
           to="/"
           className="block text-center text-2xl font-bold text-slate-900 dark:text-white mb-8"
         >
-          Dev<span className="text-indigo-500 dark:text-indigo-400">Flow</span>
+          Dev<span className="text-teal-500 dark:text-teal-400">Flow</span>
         </Link>
 
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-8">

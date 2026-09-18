@@ -140,7 +140,7 @@ export default function TaskModal({ task, onClose, onTaskUpdated }: Props) {
             value={task.assignee?.id || ""}
             onChange={(e) => handleAssign(e.target.value)}
             disabled={assigning}
-            className="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
+            className="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-teal-500"
           >
             <option value="">Unassigned</option>
             {members.map((m) => (
@@ -200,12 +200,12 @@ export default function TaskModal({ task, onClose, onTaskUpdated }: Props) {
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Add a comment..."
-            className="flex-1 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
+            className="flex-1 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-teal-500"
           />
           <button
             type="submit"
             disabled={posting}
-            className="bg-indigo-500 hover:bg-indigo-400 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+            className="bg-teal-500 hover:bg-teal-400 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
           >
             Post
           </button>

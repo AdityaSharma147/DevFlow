@@ -49,7 +49,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 px-6 py-10">
+    <div className="min-h-screen bg-slate-200 dark:bg-slate-950 px-6 py-10">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">
           Welcome back, {user.name || "there"}
@@ -170,7 +170,7 @@ export default function Dashboard() {
 
             <Link
               to="/workspaces"
-              className="inline-block bg-indigo-500 hover:bg-indigo-400 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition"
+              className="inline-block bg-[#008080] hover:bg-[#009B77] text-white px-5 py-2.5 rounded-lg text-sm font-medium transition"
             >
               Go to Workspaces
             </Link>

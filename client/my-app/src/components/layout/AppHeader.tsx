@@ -57,13 +57,13 @@ export default function AppHeader() {
   }
 
   return (
-    <nav className="w-full border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur sticky top-0 z-40">
+    <nav className="w-full border-b border-slate-200 dark:border-slate-800 bg-slate-200/80 dark:bg-slate-950/80 backdrop-blur sticky top-0 z-40">
       <div className="max-w-6xl mx-auto px-6 py-3 flex items-center gap-4">
         <Link
           to="/dashboard"
           className="text-lg font-bold text-slate-900 dark:text-white shrink-0"
         >
-          Dev<span className="text-indigo-400">Flow</span>
+          Dev<span className="text-teal-400">Flow</span>
         </Link>
 
         <div className="relative flex-1 max-w-md">
@@ -73,7 +73,7 @@ export default function AppHeader() {
             onChange={(e) => handleSearchChange(e.target.value)}
             onFocus={() => query.length >= 2 && setShowResults(true)}
             placeholder="Search projects or tasks..."
-            className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-1.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+            className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-1.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-teal-500"
           />
 
           {showResults && (

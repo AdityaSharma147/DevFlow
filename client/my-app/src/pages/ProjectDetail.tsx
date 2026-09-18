@@ -145,14 +145,14 @@ export default function ProjectDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-200 dark:bg-slate-950 flex items-center justify-center">
         <p className="text-slate-600 dark:text-slate-400">Loading tasks...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 px-6 py-8">
+    <div className="min-h-screen bg-slate-200 dark:bg-slate-950 px-6 py-8">
       <div className="max-w-6xl mx-auto">
         <Link
           to="/workspaces"
@@ -167,13 +167,13 @@ export default function ProjectDetail() {
           </h1>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+            className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
           >
             {showForm ? "Cancel" : "+ Add Task"}
           </button>
           <button
             onClick={() => setShowAiForm(!showAiForm)}
-            className="bg-violet-100 dark:bg-violet-500/20 hover:bg-violet-200 dark:hover:bg-violet-500/30 text-violet-700 dark:text-violet-300 border border-violet-300 dark:border-violet-500/30 px-4 py-2 rounded-lg text-sm font-medium transition ml-2"
+            className="bg-teal-100 dark:bg-teal-500/20 hover:bg-teal-200 dark:hover:bg-teal-500/30 text-violet-700 dark:text-teal-300 border border-teal-300 dark:border-teal-500/30 px-4 py-2 rounded-lg text-sm font-medium transition ml-2"
           >
             {showAiForm ? "Cancel" : "✨ Generate with AI"}
           </button>
@@ -198,7 +198,7 @@ export default function ProjectDetail() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
-                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-teal-500"
                 placeholder="Write the thing..."
               />
             </div>
@@ -222,14 +222,14 @@ export default function ProjectDetail() {
             <button
               type="submit"
               disabled={creating}
-              className="bg-indigo-500 hover:bg-indigo-400 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+              className="bg-teal-500 hover:bg-teal-400 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
             >
               {creating ? "Adding..." : "Add"}
             </button>
           </form>
         )}
         {showAiForm && (
-          <div className="bg-white dark:bg-slate-900 border border-violet-300 dark:border-violet-500/30 rounded-xl p-4 mb-6">
+          <div className="bg-white dark:bg-slate-900 border border-teal-300 dark:border-teal-500/30 rounded-xl p-4 mb-6">
             <form
               onSubmit={handleGenerateTasks}
               className="flex gap-3 items-end flex-wrap mb-3"
@@ -248,14 +248,14 @@ export default function ProjectDetail() {
                   value={aiGoal}
                   onChange={(e) => setAiGoal(e.target.value)}
                   required
-                  className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-violet-500"
+                  className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-teal-500"
                   placeholder="e.g. Build a payment system"
                 />
               </div>
               <button
                 type="submit"
                 disabled={aiGenerating}
-                className="bg-violet-500 hover:bg-violet-400 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+                className="bg-teal-500 hover:bg-teal-400 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
               >
                 {aiGenerating ? "Generating..." : "Generate"}
               </button>
@@ -321,7 +321,7 @@ export default function ProjectDetail() {
                       draggable
                       onDragStart={() => handleDragStart(task.id)}
                       onClick={() => setSelectedTask(task)}
-                      className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-3 cursor-grab active:cursor-grabbing hover:border-indigo-300 dark:hover:border-indigo-500/50 transition"
+                      className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-3 cursor-grab active:cursor-grabbing hover:border-teal-300 dark:hover:border-teal-500/50 transition"
                     >
                       <p className="text-slate-900 dark:text-white text-sm mb-2">
                         {task.title}

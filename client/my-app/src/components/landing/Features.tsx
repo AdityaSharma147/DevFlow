@@ -48,12 +48,9 @@ export default function Features() {
         {features.map(({ icon: Icon, title, desc }) => (
           <div
             key={title}
-            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 hover:border-indigo-300 dark:hover:border-indigo-500/50 transition"
+            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 hover:border-teal-300 dark:hover:border-teal-500/50 transition"
           >
-            <Icon
-              className="text-indigo-500 dark:text-indigo-400 mb-4"
-              size={28}
-            />
+            <Icon className="text-teal-500 dark:text-teal-400 mb-4" size={28} />
             <h3 className="text-slate-900 dark:text-white font-semibold mb-2">
               {title}
             </h3>

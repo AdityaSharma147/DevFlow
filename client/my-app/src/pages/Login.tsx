@@ -59,7 +59,7 @@ export default function Login() {
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-teal-500"
             placeholder="you@example.com"
           />
         </div>
@@ -79,7 +79,7 @@ export default function Login() {
             value={formData.password}
             onChange={handleChange}
             required
-            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-teal-500"
             placeholder="Enter your password"
           />
         </div>
@@ -87,7 +87,7 @@ export default function Login() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-indigo-500 hover:bg-indigo-400 disabled:opacity-50 text-white rounded-lg py-2.5 text-sm font-medium transition"
+          className="w-full bg-teal-500 hover:bg-teal-400 disabled:opacity-50 text-white rounded-lg py-2.5 text-sm font-medium transition"
         >
           {loading ? "Logging in..." : "Log in"}
         </button>
@@ -95,7 +95,7 @@ export default function Login() {
 
       <p className="text-sm text-slate-600 dark:text-slate-400 text-center mt-6">
         Don't have an account?{" "}
-        <Link to="/register" className="text-indigo-400 hover:text-indigo-300">
+        <Link to="/register" className="text-teal-400 hover:text-teal-300">
           Sign up
         </Link>
       </p>

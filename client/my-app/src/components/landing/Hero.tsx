@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 export default function Hero() {
   return (
     <section className="max-w-7xl mx-auto px-6 pt-24 pb-20 text-center">
-      <span className="inline-block text-xs font-medium text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/30 rounded-full px-4 py-1 mb-6">
+      <span className="inline-block text-xs font-medium text-teal-600 dark:text-teal-300 bg-teal-50 dark:bg-teal-500/10 border border-teal-200 dark:border-teal-500/30 rounded-full px-4 py-1 mb-6">
         AI-Powered Project Management
       </span>
 
       <h1 className="text-4xl md:text-6xl font-bold text-slate-900 dark:text-white leading-tight max-w-3xl mx-auto">
         Plan. Build. Ship.
-        <span className="block text-indigo-500 dark:text-indigo-400">
+        <span className="block text-teal-500 dark:text-teal-400">
           Scale — with DevFlow.
         </span>
       </h1>
@@ -23,7 +23,7 @@ export default function Hero() {
       <div className="mt-10 flex items-center justify-center gap-4">
         <Link
           to="/register"
-          className="bg-indigo-500 hover:bg-indigo-400 text-white px-6 py-3 rounded-lg font-medium transition"
+          className="bg-teal-500 hover:bg-teal-400 text-white px-6 py-3 rounded-lg font-medium transition"
         >
           Start for free
         </Link>

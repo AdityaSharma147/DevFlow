@@ -62,7 +62,7 @@ export default function Register() {
             value={formData.name}
             onChange={handleChange}
             required
-            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-teal-500"
             placeholder="Jane Doe"
           />
         </div>
@@ -82,7 +82,7 @@ export default function Register() {
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-teal-500"
             placeholder="you@example.com"
           />
         </div>
@@ -103,7 +103,7 @@ export default function Register() {
             onChange={handleChange}
             required
             minLength={8}
-            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-smfocus:outline-none focus:border-indigo-500"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-smfocus:outline-none focus:border-teal-500"
             placeholder="At least 8 characters"
           />
         </div>
@@ -111,7 +111,7 @@ export default function Register() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-indigo-500 hover:bg-indigo-400 disabled:opacity-50 text-white rounded-lg py-2.5 text-sm font-medium transition"
+          className="w-full bg-teal-500 hover:bg-teal-400 disabled:opacity-50 text-white rounded-lg py-2.5 text-sm font-medium transition"
         >
           {loading ? "Creating account..." : "Create account"}
         </button>
@@ -119,7 +119,7 @@ export default function Register() {
 
       <p className="text-sm text-slate-600 dark:text-slate-400 text-center mt-6">
         Already have an account?{" "}
-        <Link to="/login" className="text-indigo-400 hover:text-indigo-300">
+        <Link to="/login" className="text-teal-400 hover:text-teal-300">
           Log in
         </Link>
       </p>

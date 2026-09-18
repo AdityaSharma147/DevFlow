@@ -80,7 +80,7 @@ export default function WorkspaceDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-200 dark:bg-slate-950 flex items-center justify-center">
         <p className="text-slate-600 dark:text-slate-400">Loading...</p>
       </div>
     );
@@ -88,7 +88,7 @@ export default function WorkspaceDetail() {
 
   if (!workspace) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-200 dark:bg-slate-950 flex items-center justify-center">
         <p className="text-slate-600 dark:text-slate-400">
           Workspace not found.
         </p>
@@ -103,7 +103,7 @@ export default function WorkspaceDetail() {
     myMembership?.role === "ADMIN" || myMembership?.role === "MANAGER";
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 px-6 py-12">
+    <div className="min-h-screen bg-slate-200 dark:bg-slate-950 px-6 py-12">
       <div className="max-w-4xl mx-auto">
         <Link
           to="/workspaces"
@@ -119,7 +119,7 @@ export default function WorkspaceDetail() {
           {canManageProjects && (
             <button
               onClick={() => setShowForm(!showForm)}
-              className="bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+              className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
             >
               {showForm ? "Cancel" : "+ New Project"}
             </button>
@@ -150,7 +150,7 @@ export default function WorkspaceDetail() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-teal-500"
                 placeholder="Website Redesign"
               />
             </div>
@@ -162,14 +162,14 @@ export default function WorkspaceDetail() {
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-teal-500"
                 placeholder="What's this project about?"
               />
             </div>
             <button
               type="submit"
               disabled={creating}
-              className="bg-indigo-500 hover:bg-indigo-400 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+              className="bg-teal-500 hover:bg-teal-400 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
             >
               {creating ? "Creating..." : "Create Project"}
             </button>
@@ -185,10 +185,10 @@ export default function WorkspaceDetail() {
             {projects.map((p) => (
               <div
                 key={p.id}
-                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-indigo-300 dark:hover:border-indigo-500/50 transition"
+                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-teal-300 dark:hover:border-teal-500/50 transition"
               >
                 <Link to={`/projects/${p.id}`}>
-                  <h3 className="text-slate-900 dark:text-white font-semibold mb-1 hover:text-indigo-500 dark:hover:text-indigo-400 transition">
+                  <h3 className="text-slate-900 dark:text-white font-semibold mb-1 hover:text-teal-500 dark:hover:text-teal-400 transition">
                     {p.name}
                   </h3>
                 </Link>
@@ -218,7 +218,7 @@ export default function WorkspaceDetail() {
                       </div>
                       <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5">
                         <div
-                          className="bg-indigo-500 h-1.5 rounded-full transition-all"
+                          className="bg-teal-500 h-1.5 rounded-full transition-all"
                           style={{ width: `${percent}%` }}
                         />
                       </div>

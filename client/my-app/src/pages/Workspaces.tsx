@@ -136,7 +136,7 @@ export default function Workspaces() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 px-6 py-12">
+    <div className="min-h-screen bg-slate-200 dark:bg-slate-950 px-6 py-12">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
@@ -144,7 +144,7 @@ export default function Workspaces() {
           </h1>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+            className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
           >
             {showForm ? "Cancel" : "+ New Workspace"}
           </button>
@@ -169,7 +169,7 @@ export default function Workspaces() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-teal-500"
                 placeholder="Acme Team"
               />
             </div>
@@ -181,14 +181,14 @@ export default function Workspaces() {
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-teal-500"
                 placeholder="What's this workspace for?"
               />
             </div>
             <button
               type="submit"
               disabled={creating}
-              className="bg-indigo-500 hover:bg-indigo-400 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+              className="bg-teal-500 hover:bg-teal-400 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
             >
               {creating ? "Creating..." : "Create Workspace"}
             </button>
@@ -214,11 +214,11 @@ export default function Workspaces() {
               return (
                 <div
                   key={ws.id}
-                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-indigo-500/50 transition"
+                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-teal-500/50 transition"
                 >
                   <h3
                     onClick={() => navigate(`/workspaces/${ws.id}`)}
-                    className="text-slate-900 dark:text-white font-semibold mb-1 cursor-pointer hover:text-indigo-400 transition"
+                    className="text-slate-900 dark:text-white font-semibold mb-1 cursor-pointer hover:text-teal-400 transition"
                   >
                     {ws.name}
                   </h3>
@@ -240,7 +240,7 @@ export default function Workspaces() {
                   {isAdmin && (
                     <button
                       onClick={() => toggleInvite(ws.id)}
-                      className="text-xs text-indigo-400 hover:text-indigo-300 font-medium"
+                      className="text-xs text-teal-400 hover:text-teal-300 font-medium"
                     >
                       {inviteOpenFor === ws.id ? "Cancel" : "+ Invite member"}
                     </button>
@@ -320,12 +320,12 @@ export default function Workspaces() {
                         onChange={(e) => setInviteEmail(e.target.value)}
                         required
                         placeholder="teammate@example.com"
-                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-white text-xs focus:outline-none focus:border-indigo-500"
+                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-white text-xs focus:outline-none focus:border-teal-500"
                       />
                       <button
                         type="submit"
                         disabled={inviting}
-                        className="bg-indigo-500 hover:bg-indigo-400 disabled:opacity-50 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition"
+                        className="bg-teal-500 hover:bg-teal-400 disabled:opacity-50 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition"
                       >
                         {inviting ? "Inviting..." : "Send Invite"}
                       </button>

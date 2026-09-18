@@ -12,7 +12,7 @@ export default function Navbar() {
           to="/"
           className="text-xl font-bold text-slate-900 dark:text-white"
         >
-          Dev<span className="text-indigo-500 dark:text-indigo-400">Flow</span>
+          Dev<span className="text-teal-500 dark:text-teal-400">Flow</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-8 text-sm text-slate-600 dark:text-slate-300">
@@ -46,7 +46,7 @@ export default function Navbar() {
           </Link>
           <Link
             to="/register"
-            className="text-sm bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2 rounded-lg transition"
+            className="text-sm bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-lg transition"
           >
             Get Started
           </Link>
