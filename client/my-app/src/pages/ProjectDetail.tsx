@@ -23,10 +23,10 @@ const COLUMNS: { key: Task["status"]; label: string }[] = [
 ];
 
 const PRIORITY_COLORS: Record<Task["priority"], string> = {
-  LOW: "bg-slate-700 text-slate-300",
-  MEDIUM: "bg-blue-500/20 text-blue-300",
-  HIGH: "bg-orange-500/20 text-orange-300",
-  URGENT: "bg-red-500/20 text-red-300",
+  LOW: "bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300",
+  MEDIUM: "bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300",
+  HIGH: "bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-300",
+  URGENT: "bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-300",
 };
 
 export default function ProjectDetail() {
@@ -49,6 +49,7 @@ export default function ProjectDetail() {
     { title: string; priority: string }[]
   >([]);
   const [aiAdding, setAiAdding] = useState(false);
+
   async function handleGenerateTasks(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setAiError("");
@@ -144,24 +145,26 @@ export default function ProjectDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <p className="text-slate-400">Loading tasks...</p>
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
+        <p className="text-slate-600 dark:text-slate-400">Loading tasks...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 px-6 py-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 px-6 py-8">
       <div className="max-w-6xl mx-auto">
         <Link
           to="/workspaces"
-          className="text-sm text-slate-400 hover:text-white mb-4 inline-block"
+          className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white mb-4 inline-block"
         >
           ← Back to Workspaces
         </Link>
 
         <div className="flex items-center justify-between mb-6 mt-2">
-          <h1 className="text-2xl font-bold text-white">Board</h1>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+            Board
+          </h1>
           <button
             onClick={() => setShowForm(!showForm)}
             className="bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
@@ -170,7 +173,7 @@ export default function ProjectDetail() {
           </button>
           <button
             onClick={() => setShowAiForm(!showAiForm)}
-            className="bg-violet-500/20 hover:bg-violet-500/30 text-violet-300 border border-violet-500/30 px-4 py-2 rounded-lg text-sm font-medium transition ml-2"
+            className="bg-violet-100 dark:bg-violet-500/20 hover:bg-violet-200 dark:hover:bg-violet-500/30 text-violet-700 dark:text-violet-300 border border-violet-300 dark:border-violet-500/30 px-4 py-2 rounded-lg text-sm font-medium transition ml-2"
           >
             {showAiForm ? "Cancel" : "✨ Generate with AI"}
           </button>
@@ -179,11 +182,15 @@ export default function ProjectDetail() {
         {showForm && (
           <form
             onSubmit={handleCreate}
-            className="bg-slate-900 border border-slate-800 rounded-xl p-4 mb-6 flex gap-3 items-end flex-wrap"
+            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 mb-6 flex gap-3 items-end flex-wrap"
           >
-            {error && <p className="text-red-400 text-xs w-full">{error}</p>}
+            {error && (
+              <p className="text-red-600 dark:text-red-400 text-xs w-full">
+                {error}
+              </p>
+            )}
             <div className="flex-1 min-w-50">
-              <label className="block text-xs text-slate-400 mb-1">
+              <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">
                 Task title
               </label>
               <input
@@ -191,12 +198,12 @@ export default function ProjectDetail() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-indigo-500"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
                 placeholder="Write the thing..."
               />
             </div>
             <div>
-              <label className="block text-xs text-slate-400 mb-1">
+              <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">
                 Priority
               </label>
               <select
@@ -204,7 +211,7 @@ export default function ProjectDetail() {
                 onChange={(e) =>
                   setPriority(e.target.value as Task["priority"])
                 }
-                className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm"
+                className="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm"
               >
                 <option value="LOW">Low</option>
                 <option value="MEDIUM">Medium</option>
@@ -222,16 +229,18 @@ export default function ProjectDetail() {
           </form>
         )}
         {showAiForm && (
-          <div className="bg-slate-900 border border-violet-500/30 rounded-xl p-4 mb-6">
+          <div className="bg-white dark:bg-slate-900 border border-violet-300 dark:border-violet-500/30 rounded-xl p-4 mb-6">
             <form
               onSubmit={handleGenerateTasks}
               className="flex gap-3 items-end flex-wrap mb-3"
             >
               {aiError && (
-                <p className="text-red-400 text-xs w-full">{aiError}</p>
+                <p className="text-red-600 dark:text-red-400 text-xs w-full">
+                  {aiError}
+                </p>
               )}
               <div className="flex-1 min-w-60">
-                <label className="block text-xs text-slate-400 mb-1">
+                <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">
                   Describe a goal
                 </label>
                 <input
@@ -239,7 +248,7 @@ export default function ProjectDetail() {
                   value={aiGoal}
                   onChange={(e) => setAiGoal(e.target.value)}
                   required
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-violet-500"
+                  className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-violet-500"
                   placeholder="e.g. Build a payment system"
                 />
               </div>
@@ -254,7 +263,7 @@ export default function ProjectDetail() {
 
             {aiSuggestions.length > 0 && (
               <div>
-                <p className="text-xs text-slate-400 mb-2">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
                   {aiSuggestions.length} tasks generated — review, then add
                   them:
                 </p>
@@ -262,9 +271,11 @@ export default function ProjectDetail() {
                   {aiSuggestions.map((t, i) => (
                     <div
                       key={i}
-                      className="flex items-center justify-between bg-slate-800 rounded-lg px-3 py-2 text-sm"
+                      className="flex items-center justify-between bg-slate-100 dark:bg-slate-800 rounded-lg px-3 py-2 text-sm"
                     >
-                      <span className="text-white">{t.title}</span>
+                      <span className="text-slate-900 dark:text-white">
+                        {t.title}
+                      </span>
                       <span
                         className={`text-[10px] px-2 py-0.5 rounded-full ${PRIORITY_COLORS[t.priority as Task["priority"]]}`}
                       >
@@ -294,11 +305,11 @@ export default function ProjectDetail() {
                 key={col.key}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={() => handleDrop(col.key)}
-                className="bg-slate-900/50 border border-slate-800 rounded-xl p-3 min-h-75"
+                className="bg-slate-100/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3 min-h-75"
               >
-                <h3 className="text-slate-300 text-sm font-semibold mb-3 flex items-center justify-between">
+                <h3 className="text-slate-700 dark:text-slate-300 text-sm font-semibold mb-3 flex items-center justify-between">
                   {col.label}
-                  <span className="text-xs text-slate-500 bg-slate-800 rounded-full px-2 py-0.5">
+                  <span className="text-xs text-slate-500 dark:text-slate-500 bg-slate-200 dark:bg-slate-800 rounded-full px-2 py-0.5">
                     {columnTasks.length}
                   </span>
                 </h3>
@@ -310,9 +321,11 @@ export default function ProjectDetail() {
                       draggable
                       onDragStart={() => handleDragStart(task.id)}
                       onClick={() => setSelectedTask(task)}
-                      className="bg-slate-800 border border-slate-700 rounded-lg p-3 cursor-grab active:cursor-grabbing hover:border-indigo-500/50 transition"
+                      className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-3 cursor-grab active:cursor-grabbing hover:border-indigo-300 dark:hover:border-indigo-500/50 transition"
                     >
-                      <p className="text-white text-sm mb-2">{task.title}</p>
+                      <p className="text-slate-900 dark:text-white text-sm mb-2">
+                        {task.title}
+                      </p>
                       <div className="flex items-center justify-between">
                         <span
                           className={`text-[10px] px-2 py-0.5 rounded-full ${PRIORITY_COLORS[task.priority]}`}

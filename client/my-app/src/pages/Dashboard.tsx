@@ -49,78 +49,95 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-950 px-6 py-10">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 px-6 py-10">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-2xl font-bold text-white mb-1">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">
           Welcome back, {user.name || "there"}
         </h1>
-        <p className="text-slate-400 text-sm mb-8">{user.email}</p>
+        <p className="text-slate-600 dark:text-slate-400 text-sm mb-8">
+          {user.email}
+        </p>
 
         {loading ? (
-          <p className="text-slate-400">Loading dashboard...</p>
+          <p className="text-slate-600 dark:text-slate-400">
+            Loading dashboard...
+          </p>
         ) : !data ? (
-          <p className="text-slate-400">Couldn't load dashboard data.</p>
+          <p className="text-slate-600 dark:text-slate-400">
+            Couldn't load dashboard data.
+          </p>
         ) : (
           <>
-            {/* Stat cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                <p className="text-2xl font-bold text-white">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-slate-300 dark:hover:border-slate-700 transition">
+                <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
                   {data.workspaceCount}
                 </p>
-                <p className="text-xs text-slate-400 mt-1">Workspaces</p>
+                <p className="text-xs text-slate-500 dark:text-slate-500 mt-1.5 font-medium">
+                  Workspaces
+                </p>
               </div>
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                <p className="text-2xl font-bold text-white">
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-slate-300 dark:hover:border-slate-700 transition">
+                <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
                   {data.taskCount}
                 </p>
-                <p className="text-xs text-slate-400 mt-1">My Tasks</p>
+                <p className="text-xs text-slate-500 dark:text-slate-500 mt-1.5 font-medium">
+                  My Tasks
+                </p>
               </div>
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                <p className="text-2xl font-bold text-orange-300">
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-slate-300 dark:hover:border-slate-700 transition">
+                <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
                   {data.tasksByStatus.IN_PROGRESS}
                 </p>
-                <p className="text-xs text-slate-400 mt-1">In Progress</p>
+                <p className="text-xs text-slate-500 dark:text-slate-500 mt-1.5 font-medium">
+                  In Progress
+                </p>
               </div>
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                <p className="text-2xl font-bold text-green-300">
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-slate-300 dark:hover:border-slate-700 transition">
+                <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
                   {data.tasksByStatus.DONE}
                 </p>
-                <p className="text-xs text-slate-400 mt-1">Completed</p>
+                <p className="text-xs text-slate-500 dark:text-slate-500 mt-1.5 font-medium">
+                  Completed
+                </p>
               </div>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 mb-8">
-              <h2 className="text-white font-semibold mb-1">Quick Actions</h2>
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 mb-6">
+              <h2 className="text-slate-900 dark:text-white font-semibold text-base mb-1">
+                Quick Actions
+              </h2>
               <p className="text-slate-500 text-xs mb-4">
                 Jump straight to common tasks
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link
                   to="/workspaces"
-                  className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white px-4 py-2 rounded-lg text-sm transition"
+                  className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white px-4 py-2 rounded-lg text-sm transition"
                 >
                   + New Workspace
                 </Link>
                 <Link
                   to="/workspaces"
-                  className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white px-4 py-2 rounded-lg text-sm transition"
+                  className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white px-4 py-2 rounded-lg text-sm transition"
                 >
                   + New Project
                 </Link>
                 <Link
                   to="/workspaces"
-                  className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white px-4 py-2 rounded-lg text-sm transition"
+                  className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white px-4 py-2 rounded-lg text-sm transition"
                 >
                   👥 Invite Teammate
                 </Link>
               </div>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 mb-8">
-              <h2 className="text-white font-semibold mb-4">My Tasks</h2>
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 mb-8">
+              <h2 className="text-slate-900 dark:text-white font-semibold text-base mb-4">
+                My Tasks
+              </h2>
               {data.upcomingTasks.length === 0 ? (
-                <p className="text-slate-400 text-sm">
+                <p className="text-slate-600 dark:text-slate-400 text-sm">
                   No tasks assigned to you yet. Head to a project board to get
                   started.
                 </p>
@@ -130,10 +147,12 @@ export default function Dashboard() {
                     <Link
                       key={task.id}
                       to={`/projects/${task.project.id}`}
-                      className="flex items-center justify-between bg-slate-800 hover:bg-slate-750 border border-slate-700 rounded-lg px-4 py-3 transition"
+                      className="flex items-center justify-between bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700/70 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 rounded-lg px-4 py-3 transition"
                     >
                       <div>
-                        <p className="text-white text-sm">{task.title}</p>
+                        <p className="text-slate-900 dark:text-white text-sm">
+                          {task.title}
+                        </p>
                         <p className="text-xs text-slate-500">
                           {task.project.name} · {STATUS_LABELS[task.status]}
                         </p>

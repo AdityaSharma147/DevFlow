@@ -1,7 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import NotificationBell from "../NotificationBell";
 import api from "../../lib/api";
+import { Sun, Moon } from "lucide-react";
+import { useTheme } from "../../lib/ThemeContext";
 
 type SearchResults = {
   projects: { id: string; name: string; workspaceId: string }[];
@@ -19,7 +21,7 @@ export default function AppHeader() {
   });
   const [showResults, setShowResults] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
+  const { theme, toggleTheme } = useTheme();
   function handleSearchChange(value: string) {
     setQuery(value);
 
@@ -55,9 +57,12 @@ export default function AppHeader() {
   }
 
   return (
-    <nav className="w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-40">
+    <nav className="w-full border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur sticky top-0 z-40">
       <div className="max-w-6xl mx-auto px-6 py-3 flex items-center gap-4">
-        <Link to="/dashboard" className="text-lg font-bold text-white shrink-0">
+        <Link
+          to="/dashboard"
+          className="text-lg font-bold text-slate-900 dark:text-white shrink-0"
+        >
           Dev<span className="text-indigo-400">Flow</span>
         </Link>
 
@@ -68,11 +73,11 @@ export default function AppHeader() {
             onChange={(e) => handleSearchChange(e.target.value)}
             onFocus={() => query.length >= 2 && setShowResults(true)}
             placeholder="Search projects or tasks..."
-            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+            className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-1.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500"
           />
 
           {showResults && (
-            <div className="absolute top-full mt-2 w-full bg-slate-900 border border-slate-800 rounded-xl shadow-lg max-h-80 overflow-y-auto z-50">
+            <div className="absolute top-full mt-2 w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-lg max-h-80 overflow-y-auto z-50">
               {results.projects.length === 0 && results.tasks.length === 0 ? (
                 <p className="text-slate-500 text-sm p-4">No results found.</p>
               ) : (
@@ -86,7 +91,7 @@ export default function AppHeader() {
                         <button
                           key={p.id}
                           onClick={() => goToProject(p.id)}
-                          className="w-full text-left px-3 py-2 text-sm text-white hover:bg-slate-800 transition"
+                          className="w-full text-left px-3 py-2 text-sm text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
                         >
                           {p.name}
                         </button>
@@ -116,13 +121,20 @@ export default function AppHeader() {
         </div>
 
         <div className="flex items-center gap-4 shrink-0">
+          <button
+            onClick={toggleTheme}
+            className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition"
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
           <NotificationBell />
-          <span className="text-sm text-slate-400 hidden sm:inline">
+          <span className="text-sm text-slate-600 dark:text-slate-400 hidden sm:inline">
             {user.name}
           </span>
           <button
             onClick={handleLogout}
-            className="text-sm text-slate-400 hover:text-white transition"
+            className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition"
           >
             Log out
           </button>

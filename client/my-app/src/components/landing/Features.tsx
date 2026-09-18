@@ -1,5 +1,6 @@
 import { KanbanSquare, Users, Bot, Bell, BarChart3 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
+
 const features = [
   {
     icon: KanbanSquare,
@@ -36,10 +37,10 @@ const features = [
 export default function Features() {
   return (
     <section id="features" className="max-w-7xl mx-auto px-6 py-20">
-      <h2 className="text-3xl font-bold text-white text-center mb-4">
+      <h2 className="text-3xl font-bold text-slate-900 dark:text-white text-center mb-4">
         Everything your team needs
       </h2>
-      <p className="text-slate-400 text-center max-w-xl mx-auto mb-14">
+      <p className="text-slate-600 dark:text-slate-400 text-center max-w-xl mx-auto mb-14">
         From planning to deployment tracking, DevFlow keeps your team in sync.
       </p>
 
@@ -47,11 +48,16 @@ export default function Features() {
         {features.map(({ icon: Icon, title, desc }) => (
           <div
             key={title}
-            className="bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-indigo-500/50 transition"
+            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 hover:border-indigo-300 dark:hover:border-indigo-500/50 transition"
           >
-            <Icon className="text-indigo-400 mb-4" size={28} />
-            <h3 className="text-white font-semibold mb-2">{title}</h3>
-            <p className="text-slate-400 text-sm">{desc}</p>
+            <Icon
+              className="text-indigo-500 dark:text-indigo-400 mb-4"
+              size={28}
+            />
+            <h3 className="text-slate-900 dark:text-white font-semibold mb-2">
+              {title}
+            </h3>
+            <p className="text-slate-600 dark:text-slate-400 text-sm">{desc}</p>
           </div>
         ))}
       </div>

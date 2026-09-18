@@ -136,10 +136,12 @@ export default function Workspaces() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 px-6 py-12">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 px-6 py-12">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold text-white">Your Workspaces</h1>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+            Your Workspaces
+          </h1>
           <button
             onClick={() => setShowForm(!showForm)}
             className="bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
@@ -151,7 +153,7 @@ export default function Workspaces() {
         {showForm && (
           <form
             onSubmit={handleCreate}
-            className="bg-slate-900 border border-slate-800 rounded-xl p-6 mb-8 space-y-4"
+            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 mb-8 space-y-4"
           >
             {error && (
               <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2">
@@ -159,25 +161,27 @@ export default function Workspaces() {
               </div>
             )}
             <div>
-              <label className="block text-sm text-slate-300 mb-1">Name</label>
+              <label className="block text-sm text-slate-700 dark:text-slate-300 mb-1">
+                Name
+              </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-indigo-500"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
                 placeholder="Acme Team"
               />
             </div>
             <div>
-              <label className="block text-sm text-slate-300 mb-1">
+              <label className="block text-sm text-slate-700 dark:text-slate-300 mb-1">
                 Description (optional)
               </label>
               <input
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-indigo-500"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
                 placeholder="What's this workspace for?"
               />
             </div>
@@ -192,9 +196,11 @@ export default function Workspaces() {
         )}
 
         {loading ? (
-          <p className="text-slate-400">Loading workspaces...</p>
+          <p className="text-slate-600 dark:text-slate-400">
+            Loading workspaces...
+          </p>
         ) : workspaces.length === 0 ? (
-          <p className="text-slate-400">
+          <p className="text-slate-600 dark:text-slate-400">
             You don't have any workspaces yet. Create your first one above.
           </p>
         ) : (
@@ -208,23 +214,23 @@ export default function Workspaces() {
               return (
                 <div
                   key={ws.id}
-                  className="bg-slate-900 border border-slate-800 rounded-xl p-5 hover:border-indigo-500/50 transition"
+                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-indigo-500/50 transition"
                 >
                   <h3
                     onClick={() => navigate(`/workspaces/${ws.id}`)}
-                    className="text-white font-semibold mb-1 cursor-pointer hover:text-indigo-400 transition"
+                    className="text-slate-900 dark:text-white font-semibold mb-1 cursor-pointer hover:text-indigo-400 transition"
                   >
                     {ws.name}
                   </h3>
                   {ws.description && (
-                    <p className="text-slate-400 text-sm mb-3">
+                    <p className="text-slate-600 dark:text-slate-400 text-sm mb-3">
                       {ws.description}
                     </p>
                   )}
 
                   <button
                     onClick={() => toggleMembers(ws.id)}
-                    className="text-xs text-slate-300 hover:text-white font-medium mr-4"
+                    className="text-xs text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium mr-4"
                   >
                     {membersOpenFor === ws.id ? "Hide" : "View"}{" "}
                     {ws.members.length} member
@@ -255,8 +261,10 @@ export default function Workspaces() {
                           <div className="flex items-center gap-2">
                             <Avatar name={m.user.name} />
                             <div>
-                              <span className="text-white">{m.user.name}</span>
-                              <span className="text-slate-500 ml-1">
+                              <span className="text-slate-900 dark:text-white">
+                                {m.user.name}
+                              </span>
+                              <span className="text-slate-500 dark:text-slate-500 ml-1">
                                 ({m.user.email})
                               </span>
                             </div>
@@ -268,7 +276,7 @@ export default function Workspaces() {
                                 onChange={(e) =>
                                   handleRoleChange(ws.id, m.id, e.target.value)
                                 }
-                                className="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-white text-xs"
+                                className="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-slate-900 dark:text-white text-xs"
                               >
                                 {ROLES.map((r) => (
                                   <option key={r} value={r}>
@@ -284,7 +292,9 @@ export default function Workspaces() {
                               </button>
                             </div>
                           ) : (
-                            <span className="text-slate-400">{m.role}</span>
+                            <span className="text-slate-600 dark:text-slate-400">
+                              {m.role}
+                            </span>
                           )}
                         </div>
                       ))}

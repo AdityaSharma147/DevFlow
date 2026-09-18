@@ -1,10 +1,10 @@
-import Hero from "../components/landing/Hero.js";
-import Features from "../components/landing/Features.js";
-import CTA from "../components/landing/CTA.js";
+import Hero from "../components/landing/Hero";
+import Features from "../components/landing/Features";
+import CTA from "../components/landing/CTA";
 
 export default function LandingPage() {
   return (
-    <div className="bg-slate-950 min-h-screen">
+    <div className="bg-slate-100 dark:bg-slate-950 min-h-screen">
       <Hero />
       <Features />
       <CTA />

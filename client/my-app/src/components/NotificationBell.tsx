@@ -60,9 +60,11 @@ export default function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-72 bg-slate-900 border border-slate-800 rounded-xl shadow-lg z-50 max-h-96 overflow-y-auto">
+        <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-lg z-50 max-h-96 overflow-y-auto">
           <div className="p-3 border-b border-slate-800">
-            <p className="text-sm font-semibold text-white">Notifications</p>
+            <p className="text-sm font-semibold text-slate-900 dark:text-white">
+              Notifications
+            </p>
           </div>
           {notifications.length === 0 ? (
             <p className="text-slate-500 text-sm p-4">No notifications yet.</p>
@@ -71,8 +73,10 @@ export default function NotificationBell() {
               <button
                 key={n.id}
                 onClick={() => handleClick(n)}
-                className={`w-full text-left px-4 py-3 text-sm border-b border-slate-800 hover:bg-slate-800 transition ${
-                  n.read ? "text-slate-400" : "text-white font-medium"
+                className={`w-full text-left px-4 py-3 text-sm border-b border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition ${
+                  n.read
+                    ? "text-slate-500 dark:text-slate-400"
+                    : "text-slate-900 dark:text-white font-medium"
                 }`}
               >
                 <p>{n.message}</p>

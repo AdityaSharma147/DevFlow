@@ -42,13 +42,16 @@ export default function Register() {
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
-          <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2">
+          <div className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-lg px-3 py-2">
             {error}
           </div>
         )}
 
         <div>
-          <label htmlFor="name" className="block text-sm text-slate-300 mb-1">
+          <label
+            htmlFor="name"
+            className="block text-sm text-slate-700 dark:text-slate-300 mb-1"
+          >
             Full name
           </label>
           <input
@@ -59,13 +62,16 @@ export default function Register() {
             value={formData.name}
             onChange={handleChange}
             required
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-indigo-500"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
             placeholder="Jane Doe"
           />
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm text-slate-300 mb-1">
+          <label
+            htmlFor="email"
+            className="block text-sm text-slate-700 dark:text-slate-300 mb-1"
+          >
             Email
           </label>
           <input
@@ -76,7 +82,7 @@ export default function Register() {
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-indigo-500"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-indigo-500"
             placeholder="you@example.com"
           />
         </div>
@@ -84,7 +90,7 @@ export default function Register() {
         <div>
           <label
             htmlFor="password"
-            className="block text-sm text-slate-300 mb-1"
+            className="block text-sm text-slate-700 dark:text-slate-300 mb-1"
           >
             Password
           </label>
@@ -97,7 +103,7 @@ export default function Register() {
             onChange={handleChange}
             required
             minLength={8}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-indigo-500"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-smfocus:outline-none focus:border-indigo-500"
             placeholder="At least 8 characters"
           />
         </div>
@@ -111,7 +117,7 @@ export default function Register() {
         </button>
       </form>
 
-      <p className="text-sm text-slate-400 text-center mt-6">
+      <p className="text-sm text-slate-600 dark:text-slate-400 text-center mt-6">
         Already have an account?{" "}
         <Link to="/login" className="text-indigo-400 hover:text-indigo-300">
           Log in
