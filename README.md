@@ -32,12 +32,29 @@ Authorization is centralized through reusable helpers (`getWorkspaceRole`, `canM
 
 ## Running locally
 
+## Testing
+
+Backend routes have automated test coverage using Jest and Supertest, focused on authentication and role-based authorization — the highest-stakes logic in the app.
+
+```bash
+cd server
+npm test
+```
+
+Coverage includes:
+
+- User registration and login (including duplicate email and weak password rejection)
+- Workspace role-based access control (ADMIN/DEVELOPER/outsider permission boundaries)
+- Task-level authorization (VIEWER restrictions) and partial-update correctness
+
 ### Prerequisites
+
 - Node.js
 - PostgreSQL (v15+)
 - A [Groq API key](https://console.groq.com) (free, no card required)
 
 ### Backend
+
 ```bash
 cd server
 npm install
@@ -47,6 +64,7 @@ npm run dev
 ```
 
 ### Frontend
+
 ```bash
 cd client/my-app
 npm install
@@ -57,7 +75,6 @@ The app will be running at `http://localhost:5173`, with the API at `http://loca
 
 ## What's next
 
-- Automated testing (Jest + Supertest)
 - WebSocket-based real-time notifications
 - Docker + CI/CD
-- Production deployment
+- GitHub integration
