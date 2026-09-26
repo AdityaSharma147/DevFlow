@@ -40,6 +40,25 @@ Backend routes have automated test coverage using Jest and Supertest, focused on
 cd server
 npm test
 ```
+## Running with Docker
+
+The entire stack (frontend, backend, PostgreSQL) can be run with a single command using Docker Compose.
+
+1.  Create a `.env` file at the project root with your Groq API key:
+ ```bash
+   GROQ_API_KEY=your-key-here
+```
+2. Run:
+```bash
+   docker compose up
+```
+3. Visit `http://localhost:8080`
+
+First run will build both images and initialize the database — subsequent runs will be much faster thanks to Docker's layer caching. Run database migrations once, against the containerized Postgres instance:
+```bash
+cd server
+npx dotenv -e .env -v DATABASE_URL="postgresql://postgres:postgres@localhost:5433/devflow" -- npx prisma migrate deploy
+```
 
 Coverage includes:
 
@@ -76,5 +95,5 @@ The app will be running at `http://localhost:5173`, with the API at `http://loca
 ## What's next
 
 - WebSocket-based real-time notifications
-- Docker + CI/CD
+- CI/CD pipeline
 - GitHub integration
