@@ -1,83 +1,72 @@
 # DevFlow
 
-A full-stack team project management platform — think a lightweight Linear or Jira. Built to explore real-world authentication, role-based authorization, relational data modeling, and AI-assisted workflows from the ground up.
+![CI](https://github.com/AdityaSharma147/DevFlow/actions/workflows/ci.yml/badge.svg)
+
+A full-stack team project management platform — think a lightweight Linear or Jira. Built to explore real-world authentication, role-based authorization, relational data modeling, real-time collaboration, and AI-assisted workflows from the ground up.
 
 **Live demo:** [devflow-flame-one.vercel.app](https://devflow-flame-one.vercel.app)
+
+> The backend runs on a free hosting tier that sleeps when idle, so the first request after a quiet period can take 30–60 seconds to wake up.
 
 ## Features
 
 - **Authentication** — JWT-based auth with bcrypt password hashing and protected routes
-- **Workspaces** — create workspaces, invite members, manage roles (Admin / Manager / Developer / Viewer)
-- **Projects & Tasks** — organize work into projects, each with its own task list
+- **Workspaces** — create workspaces, invite members, and manage roles (Admin / Manager / Developer / Viewer)
+- **Projects & Tasks** — organize work into projects with prioritized, assignable tasks
 - **Kanban board** — drag-and-drop task management with optimistic UI updates
-- **Comments & Notifications** — collaborate on tasks with comments; get notified on invites, assignments, and activity
+- **Real-time updates** — WebSocket (Socket.IO) push for notifications, Kanban changes, and comments across connected users
+- **Comments & Notifications** — collaborate on tasks; get notified on workspace invites and on comments for tasks assigned to you
 - **Dashboard** — an aggregated overview of your workspaces, tasks, and progress
-- **AI task generation** — describe a goal in plain language and get a generated checklist of tasks, powered by Groq's LLM API
+- **AI task generation** — describe a goal in plain language and get a generated task checklist, powered by Groq's LLM API
 - **Global search** — debounced search across projects and tasks, scoped to your own workspaces
 - **Role-based access control** — permissions enforced server-side at every layer, not just hidden in the UI
+- **Light / dark theme** — persisted preference, applied across the entire app
 
 ## Tech Stack
 
-**Frontend:** React, TypeScript, Vite, Tailwind CSS
-**Backend:** Node.js, Express, TypeScript
-**Database:** PostgreSQL with Prisma ORM
-**AI:** Groq (OpenAI-compatible LLM API)
-**Auth:** JWT, bcrypt
+| Layer    | Technologies                                           |
+| -------- | ------------------------------------------------------ |
+| Frontend | React, TypeScript, Vite, Tailwind CSS                  |
+| Backend  | Node.js, Express, TypeScript, Socket.IO                |
+| Database | PostgreSQL, Prisma ORM                                 |
+| AI       | Groq (OpenAI-compatible LLM API)                       |
+| Auth     | JWT, bcrypt                                            |
+| Testing  | Jest, Supertest                                        |
+| DevOps   | Docker, Docker Compose, GitHub Actions                 |
+| Hosting  | Vercel (frontend), Render (backend), Neon (PostgreSQL) |
 
 ## Architecture
 
-Data model: `User` → `WorkspaceMember` (join table with role) → `Workspace` → `Project` → `ProjectMember` / `Task` → `Comment`, plus a `Notification` model.
+**Data model:** `User` → `WorkspaceMember` (join table with role) → `Workspace` → `Project` → `ProjectMember` / `Task` → `Comment`, plus a `Notification` model. Roles are scoped per workspace, so the same user can be an Admin in one workspace and a Viewer in another.
 
-Authorization is centralized through reusable helpers (`getWorkspaceRole`, `canManageProjects`) rather than duplicated permission checks scattered across routes — every protected action re-verifies the requester's role server-side.
+**Authorization** is centralized through reusable helpers (`getWorkspaceRole`, `canManageProjects`) rather than duplicated permission checks scattered across routes. Every protected action re-verifies the requester's role server-side, and a "last admin" guard prevents a workspace from ever ending up with no admins.
+
+**Real-time layer:** the Socket.IO server shares the Express HTTP server and authenticates connections with the same JWT. Each user joins a personal room for notifications, and clients join a project room while viewing a board. Data is always written to the database first and pushed over the socket second, so a real-time failure never loses data, and clients resync from the database on reconnect.
 
 ## Running locally
 
-## Testing
-
-Backend routes have automated test coverage using Jest and Supertest, focused on authentication and role-based authorization — the highest-stakes logic in the app.
-
-```bash
-cd server
-npm test
-```
-## Running with Docker
-
-The entire stack (frontend, backend, PostgreSQL) can be run with a single command using Docker Compose.
-
-1.  Create a `.env` file at the project root with your Groq API key:
- ```bash
-   GROQ_API_KEY=your-key-here
-```
-2. Run:
-```bash
-   docker compose up
-```
-3. Visit `http://localhost:8080`
-
-First run will build both images and initialize the database — subsequent runs will be much faster thanks to Docker's layer caching. Run database migrations once, against the containerized Postgres instance:
-```bash
-cd server
-npx dotenv -e .env -v DATABASE_URL="postgresql://postgres:postgres@localhost:5433/devflow" -- npx prisma migrate deploy
-```
-
-Coverage includes:
-
-- User registration and login (including duplicate email and weak password rejection)
-- Workspace role-based access control (ADMIN/DEVELOPER/outsider permission boundaries)
-- Task-level authorization (VIEWER restrictions) and partial-update correctness
-
 ### Prerequisites
 
-- Node.js
-- PostgreSQL (v15+)
+- Node.js 20+
+- PostgreSQL 15+
 - A [Groq API key](https://console.groq.com) (free, no card required)
+
+### Environment variables
+
+| Variable       | Where               | Purpose                                               |
+| -------------- | ------------------- | ----------------------------------------------------- |
+| `DATABASE_URL` | server              | PostgreSQL connection string                          |
+| `JWT_SECRET`   | server              | Secret used to sign JWTs                              |
+| `GROQ_API_KEY` | server              | Groq API key for AI task generation                   |
+| `FRONTEND_URL` | server (production) | Deployed frontend origin, allowed by CORS             |
+| `VITE_API_URL` | client (optional)   | API base URL; defaults to `http://localhost:5000/api` |
 
 ### Backend
 
 ```bash
 cd server
 npm install
-cp .env.example .env   # fill in your DATABASE_URL, JWT_SECRET, and GROQ_API_KEY
+cp .env.example .env   # fill in DATABASE_URL, JWT_SECRET, and GROQ_API_KEY
 npx prisma migrate dev
 npm run dev
 ```
@@ -90,10 +79,56 @@ npm install
 npm run dev
 ```
 
-The app will be running at `http://localhost:5173`, with the API at `http://localhost:5000`.
+The app runs at `http://localhost:5173`, with the API at `http://localhost:5000`.
+
+## Running with Docker
+
+The entire stack (frontend, backend, PostgreSQL) runs with a single command using Docker Compose.
+
+1. Create a `.env` file at the project root:
+
+```
+   GROQ_API_KEY=your-key-here
+```
+
+2. Start everything:
+
+```bash
+   docker compose up
+```
+
+3. In a second terminal, apply the database migrations to the containerized Postgres (first run only):
+
+```bash
+   cd server
+   npx dotenv -e .env -v DATABASE_URL="postgresql://postgres:postgres@localhost:5433/devflow" -- npx prisma migrate deploy
+```
+
+4. Visit `http://localhost:8080`
+
+The first run builds both images; later runs are much faster thanks to Docker's layer caching.
+
+## Testing
+
+Backend routes are covered by automated Jest and Supertest tests, focused on authentication and role-based authorization — the highest-stakes logic in the app. Tests run against a separate database so your development data is never touched.
+
+```bash
+cd server
+# create .env.test with DATABASE_URL pointing at a dedicated test database, then:
+npx dotenv -e .env.test -- npx prisma migrate deploy
+npm test
+```
+
+Coverage includes:
+
+- User registration and login (including duplicate email and weak password rejection)
+- Workspace role-based access control (Admin / Developer / outsider permission boundaries)
+- Task-level authorization (Viewer restrictions) and partial-update correctness
+
+## CI
+
+A GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push and pull request: it starts a PostgreSQL service container, applies migrations, runs the Jest suite, and then verifies that both Docker images still build.
 
 ## What's next
 
-- WebSocket-based real-time notifications
-- CI/CD pipeline
-- GitHub integration
+- GitHub integration (OAuth, webhooks, commit and PR activity on the dashboard)
