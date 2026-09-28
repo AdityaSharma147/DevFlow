@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import TaskModal from "../components/TaskModal";
 import api from "../lib/api";
+import { getSocket } from "../lib/socket";
 import Avatar from "../components/Avatar";
 
 type Task = {
@@ -102,6 +103,39 @@ export default function ProjectDetail() {
     fetchTasks();
   }, [projectId]);
 
+  useEffect(() => {
+    const socket = getSocket();
+    if (!socket || !projectId) return;
+
+    // Rooms are lost on disconnect, so re-join on every (re)connect
+    function join() {
+      socket!.emit("joinProject", projectId);
+    }
+    if (socket.connected) join();
+    socket.on("connect", join);
+
+    function onTaskCreated(task: Task) {
+      setTasks((prev) =>
+        prev.some((t) => t.id === task.id) ? prev : [task, ...prev],
+      );
+    }
+
+    function onTaskUpdated(task: Task) {
+      setTasks((prev) =>
+        prev.map((t) => (t.id === task.id ? { ...t, ...task } : t)),
+      );
+    }
+
+    socket.on("task:created", onTaskCreated);
+    socket.on("task:updated", onTaskUpdated);
+
+    return () => {
+      socket.emit("leaveProject", projectId);
+      socket.off("connect", join);
+      socket.off("task:created", onTaskCreated);
+      socket.off("task:updated", onTaskUpdated);
+    };
+  }, [projectId]);
   async function handleCreate(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");

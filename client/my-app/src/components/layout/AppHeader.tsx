@@ -4,6 +4,7 @@ import NotificationBell from "../NotificationBell";
 import api from "../../lib/api";
 import { Sun, Moon } from "lucide-react";
 import { useTheme } from "../../lib/ThemeContext";
+import { disconnectSocket } from "../../lib/socket";
 
 type SearchResults = {
   projects: { id: string; name: string; workspaceId: string }[];
@@ -51,6 +52,7 @@ export default function AppHeader() {
   }
 
   function handleLogout() {
+    disconnectSocket();
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     navigate("/login");

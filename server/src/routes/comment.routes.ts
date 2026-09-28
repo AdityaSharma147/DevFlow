@@ -3,6 +3,7 @@ import prisma from "../lib/prisma";
 import { authMiddleware, AuthRequest } from "../middleware/auth.middleware";
 import { getWorkspaceRole } from "../lib/permissions";
 import { createNotification } from "../lib/notifications";
+import { getIO } from "../lib/socket";
 
 const router = Router();
 
@@ -56,7 +57,17 @@ router.post(
           `/projects/${task.projectId}`,
         );
       }
+
       res.status(201).json({ comment });
+      if (task) {
+        try {
+          getIO()
+            .to(`project:${task.projectId}`)
+            .emit("comment:created", comment);
+        } catch (err) {
+          console.error("Failed to emit comment socket event:", err);
+        }
+      }
     } catch (error) {
       console.error("Create comment error:", error);
       res.status(500).json({ error: "Something went wrong" });

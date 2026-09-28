@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getSocket } from "../lib/socket";
 import api from "../lib/api";
 
 type Notification = {
@@ -28,10 +29,27 @@ export default function NotificationBell() {
 
   useEffect(() => {
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000);
-    return () => clearInterval(interval);
-  }, []);
 
+    const socket = getSocket();
+
+    function handleNew(n: Notification) {
+      setNotifications((prev) => [n, ...prev].slice(0, 20));
+      setUnreadCount((count) => count + 1);
+    }
+
+    socket?.on("notification:new", handleNew);
+    // After any (re)connect, resync from the database in case we missed events
+    socket?.on("connect", fetchNotifications);
+
+    // Slow safety-net poll, in case the socket silently drops
+    const interval = setInterval(fetchNotifications, 120000);
+
+    return () => {
+      socket?.off("notification:new", handleNew);
+      socket?.off("connect", fetchNotifications);
+      clearInterval(interval);
+    };
+  }, []);
   async function handleClick(notification: Notification) {
     if (!notification.read) {
       try {

@@ -2,6 +2,7 @@ import { Router } from "express";
 import prisma from "../lib/prisma";
 import { authMiddleware, AuthRequest } from "../middleware/auth.middleware";
 import { getWorkspaceRole } from "../lib/permissions";
+import { getIO } from "../lib/socket";
 
 const router = Router();
 
@@ -50,7 +51,11 @@ router.post(
           createdBy: { select: { id: true, name: true, email: true } },
         },
       });
-
+      try {
+        getIO().to(`project:${projectId}`).emit("task:created", task);
+      } catch (err) {
+        console.error("Failed to emit task created:", err);
+      }
       res.status(201).json({ task });
     } catch (error) {
       console.error("Create task error:", error);
@@ -139,7 +144,13 @@ router.patch(
           createdBy: { select: { id: true, name: true, email: true } },
         },
       });
-
+      try {
+        getIO()
+          .to(`project:${updated.projectId}`)
+          .emit("task:updated", updated);
+      } catch (err) {
+        console.error("Failed to emit task update:", err);
+      }
       res.json({ task: updated });
     } catch (error) {
       console.error("Update task error:", error);

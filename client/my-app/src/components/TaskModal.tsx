@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../lib/api";
 import Avatar from "./Avatar";
+import { getSocket } from "../lib/socket";
 
 type Comment = {
   id: string;
@@ -77,6 +78,22 @@ export default function TaskModal({ task, onClose, onTaskUpdated }: Props) {
     fetchMembers();
   }, [task.id]);
 
+  useEffect(() => {
+    const socket = getSocket();
+    if (!socket) return;
+
+    function onComment(comment: Comment & { taskId: string }) {
+      if (comment.taskId !== task.id) return;
+      setComments((prev) =>
+        prev.some((c) => c.id === comment.id) ? prev : [...prev, comment],
+      );
+    }
+
+    socket.on("comment:created", onComment);
+    return () => {
+      socket.off("comment:created", onComment);
+    };
+  }, [task.id]);
   async function handlePostComment(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!newComment.trim()) return;
