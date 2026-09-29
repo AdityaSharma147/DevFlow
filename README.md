@@ -37,6 +37,92 @@ A full-stack team project management platform — think a lightweight Linear or 
 
 ## Architecture
 
+```mermaid
+erDiagram
+    USER ||--o{ WORKSPACE_MEMBER : joins
+    WORKSPACE ||--o{ WORKSPACE_MEMBER : has
+    USER ||--o{ WORKSPACE : owns
+
+    WORKSPACE ||--o{ PROJECT : contains
+    USER ||--o{ PROJECT : creates
+    PROJECT ||--o{ PROJECT_MEMBER : has
+    USER ||--o{ PROJECT_MEMBER : joins
+
+    PROJECT ||--o{ TASK : contains
+    USER |o--o{ TASK : "is assigned"
+    USER ||--o{ TASK : creates
+
+    TASK ||--o{ COMMENT : has
+    USER ||--o{ COMMENT : writes
+
+    USER ||--o{ NOTIFICATION : receives
+
+    USER {
+        string id PK
+        string name
+        string email UK
+        string password "bcrypt hash"
+        Role role
+    }
+
+    WORKSPACE {
+        string id PK
+        string name
+        string description "optional"
+        string ownerId FK
+    }
+
+    WORKSPACE_MEMBER {
+        string id PK
+        string userId FK "unique with workspaceId"
+        string workspaceId FK
+        Role role "ADMIN, MANAGER, DEVELOPER, VIEWER"
+    }
+
+    PROJECT {
+        string id PK
+        string name
+        string description "optional"
+        string workspaceId FK
+        string createdById FK
+    }
+
+    PROJECT_MEMBER {
+        string id PK
+        string userId FK "unique with projectId"
+        string projectId FK
+        Role role
+    }
+
+    TASK {
+        string id PK
+        string title
+        string description "optional"
+        TaskStatus status "TODO, IN_PROGRESS, REVIEW, DONE"
+        TaskPriority priority "LOW, MEDIUM, HIGH, URGENT"
+        DateTime dueDate "optional"
+        string[] labels
+        string projectId FK
+        string assigneeId FK "optional"
+        string createdById FK
+    }
+
+    COMMENT {
+        string id PK
+        string content
+        string taskId FK
+        string authorId FK
+    }
+
+    NOTIFICATION {
+        string id PK
+        string message
+        string link "optional"
+        boolean read
+        string userId FK
+    }
+```
+
 **Data model:** `User` → `WorkspaceMember` (join table with role) → `Workspace` → `Project` → `ProjectMember` / `Task` → `Comment`, plus a `Notification` model. Roles are scoped per workspace, so the same user can be an Admin in one workspace and a Viewer in another.
 
 **Authorization** is centralized through reusable helpers (`getWorkspaceRole`, `canManageProjects`) rather than duplicated permission checks scattered across routes. Every protected action re-verifies the requester's role server-side, and a "last admin" guard prevents a workspace from ever ending up with no admins.
