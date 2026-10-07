@@ -41,7 +41,15 @@ export default function ProjectDetail() {
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState("");
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
-
+  const [githubRepo, setGithubRepo] = useState<string | null>(null);
+  const [repos, setRepos] = useState<{ fullName: string }[]>([]);
+  const [showRepoPicker, setShowRepoPicker] = useState(false);
+  const [linkingRepo, setLinkingRepo] = useState(false);
+  const [activity, setActivity] = useState<{
+    commits: { sha: string; message: string; author: string; date: string }[];
+    pulls: { number: number; title: string; state: string; url: string }[];
+    issues: { number: number; title: string; state: string; url: string }[];
+  } | null>(null);
   const [showAiForm, setShowAiForm] = useState(false);
   const [aiGoal, setAiGoal] = useState("");
   const [aiGenerating, setAiGenerating] = useState(false);
@@ -65,6 +73,39 @@ export default function ProjectDetail() {
       setAiError(err.response?.data?.error || "Failed to generate tasks");
     } finally {
       setAiGenerating(false);
+    }
+  }
+
+  async function fetchActivity() {
+    try {
+      const res = await api.get(`/github/projects/${projectId}/activity`);
+      setActivity(res.data);
+    } catch (err) {
+      setActivity(null);
+    }
+  }
+
+  async function openRepoPicker() {
+    try {
+      const res = await api.get("/github/repos");
+      setRepos(res.data.repos);
+      setShowRepoPicker(true);
+    } catch (err) {
+      console.error("Failed to fetch repos. Is GitHub connected?", err);
+    }
+  }
+
+  async function handleLinkRepo(repo: string) {
+    setLinkingRepo(true);
+    try {
+      await api.post(`/github/projects/${projectId}/link-repo`, { repo });
+      setGithubRepo(repo);
+      setShowRepoPicker(false);
+      fetchActivity();
+    } catch (err) {
+      console.error("Failed to link repo:", err);
+    } finally {
+      setLinkingRepo(false);
     }
   }
 
@@ -104,10 +145,14 @@ export default function ProjectDetail() {
   }, [projectId]);
 
   useEffect(() => {
+    fetchTasks();
+    fetchActivity();
+  }, [projectId]);
+
+  useEffect(() => {
     const socket = getSocket();
     if (!socket || !projectId) return;
 
-    // Rooms are lost on disconnect, so re-join on every (re)connect
     function join() {
       socket!.emit("joinProject", projectId);
     }
@@ -374,6 +419,106 @@ export default function ProjectDetail() {
               </div>
             );
           })}
+        </div>
+        <div className="mt-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-slate-900 dark:text-white font-semibold text-sm">
+              GitHub Activity
+            </h3>
+            <button
+              onClick={openRepoPicker}
+              className="text-xs text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300"
+            >
+              {activity ? "Change repo" : "Link a repository"}
+            </button>
+          </div>
+
+          {showRepoPicker && (
+            <div className="mb-4 space-y-1">
+              {repos.length === 0 ? (
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  No repositories found, or GitHub isn't connected yet.
+                </p>
+              ) : (
+                repos.map((r) => (
+                  <button
+                    key={r.fullName}
+                    onClick={() => handleLinkRepo(r.fullName)}
+                    disabled={linkingRepo}
+                    className="block w-full text-left text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white px-3 py-2 rounded-lg transition"
+                  >
+                    {r.fullName}
+                  </button>
+                ))
+              )}
+            </div>
+          )}
+
+          {activity ? (
+            <div className="grid sm:grid-cols-3 gap-4 text-xs">
+              <div>
+                <p className="text-slate-500 dark:text-slate-400 mb-2 font-medium">
+                  Recent Commits
+                </p>
+                {activity.commits.map((c) => (
+                  <div key={c.sha} className="mb-1.5">
+                    <span className="text-slate-400 dark:text-slate-500 font-mono">
+                      {c.sha}
+                    </span>{" "}
+                    <span className="text-slate-700 dark:text-slate-300">
+                      {c.message}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <p className="text-slate-500 dark:text-slate-400 mb-2 font-medium">
+                  Pull Requests
+                </p>
+                {activity.pulls.length === 0 ? (
+                  <p className="text-slate-400 dark:text-slate-500">None yet</p>
+                ) : (
+                  activity.pulls.map((p) => (
+                    <a
+                      key={p.number}
+                      href={p.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block mb-1.5 text-teal-600 dark:text-teal-400 hover:underline"
+                    >
+                      #{p.number} {p.title}
+                    </a>
+                  ))
+                )}
+              </div>
+              <div>
+                <p className="text-slate-500 dark:text-slate-400 mb-2 font-medium">
+                  Issues
+                </p>
+                {activity.issues.length === 0 ? (
+                  <p className="text-slate-400 dark:text-slate-500">None yet</p>
+                ) : (
+                  activity.issues.map((i) => (
+                    <a
+                      key={i.number}
+                      href={i.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block mb-1.5 text-teal-600 dark:text-teal-400 hover:underline"
+                    >
+                      #{i.number} {i.title}
+                    </a>
+                  ))
+                )}
+              </div>
+            </div>
+          ) : (
+            !showRepoPicker && (
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                No repository linked yet.
+              </p>
+            )
+          )}
         </div>
         {selectedTask && (
           <TaskModal

@@ -39,6 +39,27 @@ export default function Dashboard() {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [githubConnected, setGithubConnected] = useState(false);
+  const [githubUsername, setGithubUsername] = useState("");
+
+  async function fetchGithubStatus() {
+    try {
+      const res = await api.get("/github/status");
+      setGithubConnected(res.data.connected);
+      setGithubUsername(res.data.username || "");
+    } catch (err) {
+      console.error("Failed to fetch GitHub status:", err);
+    }
+  }
+
+  async function handleConnectGithub() {
+    try {
+      const res = await api.get("/github/connect");
+      window.location.href = res.data.url;
+    } catch (err) {
+      console.error("Failed to start GitHub connection:", err);
+    }
+  }
 
   useEffect(() => {
     api
@@ -46,6 +67,7 @@ export default function Dashboard() {
       .then((res) => setData(res.data))
       .catch((err) => console.error("Failed to load dashboard:", err))
       .finally(() => setLoading(false));
+    fetchGithubStatus();
   }, []);
 
   return (
@@ -130,6 +152,33 @@ export default function Dashboard() {
                   👥 Invite Teammate
                 </Link>
               </div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 mb-6">
+              <h2 className="text-slate-900 dark:text-white font-semibold text-base mb-1">
+                GitHub
+              </h2>
+              {githubConnected ? (
+                <p className="text-slate-600 dark:text-slate-400 text-sm">
+                  Connected as{" "}
+                  <span className="text-teal-600 dark:text-teal-400 font-medium">
+                    @{githubUsername}
+                  </span>
+                </p>
+              ) : (
+                <>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs mb-3">
+                    Connect your GitHub account to link repositories to your
+                    projects.
+                  </p>
+                  <button
+                    onClick={handleConnectGithub}
+                    className="bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 dark:hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+                  >
+                    Connect GitHub
+                  </button>
+                </>
+              )}
             </div>
 
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 mb-8">

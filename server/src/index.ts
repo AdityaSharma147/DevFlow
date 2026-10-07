@@ -12,6 +12,8 @@ import commentRoutes from "./routes/comment.routes";
 import notificationRoutes from "./routes/notification.routes";
 import dashboardRoutes from "./routes/dashboard.routes";
 import aiRoutes from "./routes/ai.routes";
+import githubRoutes from "./routes/github.routes";
+
 import searchRoutes from "./routes/search.routes";
 import { setIO } from "./lib/socket";
 
@@ -28,7 +30,7 @@ const allowedOrigins = [
 
 app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
-
+app.use("/api/github", githubRoutes);
 app.get("/", (req, res) => {
   res.json({ message: "DevFlow API is running" });
 });
