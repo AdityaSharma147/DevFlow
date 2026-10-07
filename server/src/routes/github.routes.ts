@@ -110,7 +110,7 @@ router.post(
   authMiddleware,
   async (req: AuthRequest, res) => {
     try {
-      const { projectId } = req.params;
+      const projectId = req.params.projectId as string;
       const { repo } = req.body;
 
       if (!repo) {
@@ -136,7 +136,7 @@ router.get(
   async (req: AuthRequest, res) => {
     try {
       const project = await prisma.project.findUnique({
-        where: { id: req.params.projectId },
+        where: { id: req.params.projectId as string },
       });
 
       if (!project?.githubRepo) {
