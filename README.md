@@ -16,7 +16,8 @@ A full-stack team project management platform — think a lightweight Linear or 
 - **Kanban board** — drag-and-drop task management with optimistic UI updates
 - **Real-time updates** — WebSocket (Socket.IO) push for notifications, Kanban changes, and comments across connected users
 - **Comments & Notifications** — collaborate on tasks; get notified on workspace invites and on comments for tasks assigned to you
-- **Dashboard** — an aggregated overview of your workspaces, tasks, and progress
+- **Dashboard with data visualizations** — task status breakdown, priority distribution, and per-project completion charts, alongside an aggregated overview of your workspaces, tasks, and progress
+- **GitHub integration** — connect your GitHub account via OAuth, link a repository to a project, and see its recent commit activity, pull requests, and issues — including a commit frequency chart — right on the project board
 - **AI task generation** — describe a goal in plain language and get a generated task checklist, powered by Groq's LLM API
 - **Global search** — debounced search across projects and tasks, scoped to your own workspaces
 - **Role-based access control** — permissions enforced server-side at every layer, not just hidden in the UI
@@ -26,11 +27,11 @@ A full-stack team project management platform — think a lightweight Linear or 
 
 | Layer    | Technologies                                           |
 | -------- | ------------------------------------------------------ |
-| Frontend | React, TypeScript, Vite, Tailwind CSS                  |
+| Frontend | React, TypeScript, Vite, Tailwind CSS, Recharts        |
 | Backend  | Node.js, Express, TypeScript, Socket.IO                |
 | Database | PostgreSQL, Prisma ORM                                 |
 | AI       | Groq (OpenAI-compatible LLM API)                       |
-| Auth     | JWT, bcrypt                                            |
+| Auth     | JWT, bcrypt, GitHub OAuth                              |
 | Testing  | Jest, Supertest                                        |
 | DevOps   | Docker, Docker Compose, GitHub Actions                 |
 | Hosting  | Vercel (frontend), Render (backend), Neon (PostgreSQL) |
@@ -63,6 +64,8 @@ erDiagram
         string email UK
         string password "bcrypt hash"
         Role role
+        string githubAccessToken "optional"
+        string githubUsername "optional"
     }
 
     WORKSPACE {
@@ -85,6 +88,7 @@ erDiagram
         string description "optional"
         string workspaceId FK
         string createdById FK
+        string githubRepo "optional"
     }
 
     PROJECT_MEMBER {
@@ -123,11 +127,13 @@ erDiagram
     }
 ```
 
-**Data model:** `User` → `WorkspaceMember` (join table with role) → `Workspace` → `Project` → `ProjectMember` / `Task` → `Comment`, plus a `Notification` model. Roles are scoped per workspace, so the same user can be an Admin in one workspace and a Viewer in another.
+**Data model:** `User` → `WorkspaceMember` (join table with role) → `Workspace` → `Project` → `ProjectMember` / `Task` → `Comment`, plus a `Notification` model. Roles are scoped per workspace, so the same user can be an Admin in one workspace and a Viewer in another. A connected GitHub account's token and username live on `User`; a linked repository lives on `Project`.
 
 **Authorization** is centralized through reusable helpers (`getWorkspaceRole`, `canManageProjects`) rather than duplicated permission checks scattered across routes. Every protected action re-verifies the requester's role server-side, and a "last admin" guard prevents a workspace from ever ending up with no admins.
 
 **Real-time layer:** the Socket.IO server shares the Express HTTP server and authenticates connections with the same JWT. Each user joins a personal room for notifications, and clients join a project room while viewing a board. Data is always written to the database first and pushed over the socket second, so a real-time failure never loses data, and clients resync from the database on reconnect.
+
+**GitHub integration:** users connect their GitHub account via OAuth; the resulting access token and username are stored on their `User` record. A project can then be linked to one of the user's repositories, and the project board fetches that repo's recent commits, pull requests, and issues through the GitHub REST API, including a commit-frequency chart grouped by day.
 
 ## Running locally
 
@@ -136,23 +142,27 @@ erDiagram
 - Node.js 20+
 - PostgreSQL 15+
 - A [Groq API key](https://console.groq.com) (free, no card required)
+- A [GitHub OAuth App](https://github.com/settings/developers) (for the GitHub integration — optional for local dev if you don't need it)
 
 ### Environment variables
 
-| Variable       | Where               | Purpose                                               |
-| -------------- | ------------------- | ----------------------------------------------------- |
-| `DATABASE_URL` | server              | PostgreSQL connection string                          |
-| `JWT_SECRET`   | server              | Secret used to sign JWTs                              |
-| `GROQ_API_KEY` | server              | Groq API key for AI task generation                   |
-| `FRONTEND_URL` | server (production) | Deployed frontend origin, allowed by CORS             |
-| `VITE_API_URL` | client (optional)   | API base URL; defaults to `http://localhost:5000/api` |
+| Variable               | Where               | Purpose                                                                     |
+| ---------------------- | ------------------- | --------------------------------------------------------------------------- |
+| `DATABASE_URL`         | server              | PostgreSQL connection string                                                |
+| `JWT_SECRET`           | server              | Secret used to sign JWTs                                                    |
+| `GROQ_API_KEY`         | server              | Groq API key for AI task generation                                         |
+| `FRONTEND_URL`         | server (production) | Deployed frontend origin, allowed by CORS and used for post-OAuth redirects |
+| `GITHUB_CLIENT_ID`     | server              | GitHub OAuth App client ID                                                  |
+| `GITHUB_CLIENT_SECRET` | server              | GitHub OAuth App client secret                                              |
+| `GITHUB_CALLBACK_URL`  | server              | OAuth callback URL, must match one registered on the GitHub OAuth App       |
+| `VITE_API_URL`         | client (optional)   | API base URL; defaults to `http://localhost:5000/api`                       |
 
 ### Backend
 
 ```bash
 cd server
 npm install
-cp .env.example .env   # fill in DATABASE_URL, JWT_SECRET, and GROQ_API_KEY
+cp .env.example .env   # fill in DATABASE_URL, JWT_SECRET, GROQ_API_KEY, and GitHub OAuth values
 npx prisma migrate dev
 npm run dev
 ```
@@ -173,8 +183,8 @@ The entire stack (frontend, backend, PostgreSQL) runs with a single command usin
 
 1. Create a `.env` file at the project root:
 
-```
-   GROQ_API_KEY=your-key-here
+```bash
+  GROQ_API_KEY=your-key-here
 ```
 
 2. Start everything:
@@ -217,4 +227,6 @@ A GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push and pu
 
 ## What's next
 
-- GitHub integration (OAuth, webhooks, commit and PR activity on the dashboard)
+- GitHub webhooks for live activity updates, instead of fetching on page load
+- Burndown / velocity trend chart (requires tracking task status-change timestamps)
+- Per-repository pull request and issue state charts
