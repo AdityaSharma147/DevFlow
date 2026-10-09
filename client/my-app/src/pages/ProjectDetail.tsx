@@ -4,6 +4,7 @@ import TaskModal from "../components/TaskModal";
 import api from "../lib/api";
 import { getSocket } from "../lib/socket";
 import Avatar from "../components/Avatar";
+import CommitActivityChart from "../components/CommitActivityChart";
 
 type Task = {
   id: string;
@@ -460,16 +461,19 @@ export default function ProjectDetail() {
                 <p className="text-slate-500 dark:text-slate-400 mb-2 font-medium">
                   Recent Commits
                 </p>
-                {activity.commits.map((c) => (
-                  <div key={c.sha} className="mb-1.5">
-                    <span className="text-slate-400 dark:text-slate-500 font-mono">
-                      {c.sha}
-                    </span>{" "}
-                    <span className="text-slate-700 dark:text-slate-300">
-                      {c.message}
-                    </span>
-                  </div>
-                ))}
+                <CommitActivityChart commits={activity.commits} />
+                <div className="mt-2">
+                  {activity.commits.slice(0, 5).map((c) => (
+                    <div key={c.sha} className="mb-1.5">
+                      <span className="text-slate-400 dark:text-slate-500 font-mono">
+                        {c.sha}
+                      </span>{" "}
+                      <span className="text-slate-700 dark:text-slate-300">
+                        {c.message}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div>
                 <p className="text-slate-500 dark:text-slate-400 mb-2 font-medium">

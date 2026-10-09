@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../lib/api";
+import ProjectCompletionChart from "../components/ProjectCompletionChart";
 
 type Project = {
   id: string;
@@ -102,6 +103,13 @@ export default function WorkspaceDetail() {
   const canManageProjects =
     myMembership?.role === "ADMIN" || myMembership?.role === "MANAGER";
 
+  const projectCompletion = projects.map((p) => {
+    const total = p.tasks.length;
+    const done = p.tasks.filter((t) => t.status === "DONE").length;
+    const percent = total === 0 ? 0 : Math.round((done / total) * 100);
+    return { name: p.name, percent, done, total };
+  });
+
   return (
     <div className="min-h-screen bg-slate-200 dark:bg-slate-950 px-6 py-12">
       <div className="max-w-4xl mx-auto">
@@ -174,6 +182,18 @@ export default function WorkspaceDetail() {
               {creating ? "Creating..." : "Create Project"}
             </button>
           </form>
+        )}
+
+        {projects.length > 0 && (
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 mb-8">
+            <h2 className="text-slate-900 dark:text-white font-semibold text-base mb-1">
+              Project Completion
+            </h2>
+            <p className="text-slate-500 text-xs mb-3">
+              Task completion across all projects in this workspace
+            </p>
+            <ProjectCompletionChart projects={projectCompletion} />
+          </div>
         )}
 
         {projects.length === 0 ? (

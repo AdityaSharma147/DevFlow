@@ -158,7 +158,7 @@ router.get(
       const base = `https://api.github.com/repos/${project.githubRepo}`;
 
       const [commitsRes, pullsRes, issuesRes] = await Promise.all([
-        axios.get(`${base}/commits`, { headers, params: { per_page: 5 } }),
+        axios.get(`${base}/commits`, { headers, params: { per_page: 30 } }),
         axios.get(`${base}/pulls`, {
           headers,
           params: { state: "all", per_page: 5 },

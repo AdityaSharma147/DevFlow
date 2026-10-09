@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../lib/api";
+import TaskStatusChart from "../components/TaskStatusChart";
+import PriorityChart from "../components/PriorityChart";
 
 type DashboardData = {
   workspaceCount: number;
@@ -10,6 +12,12 @@ type DashboardData = {
     IN_PROGRESS: number;
     REVIEW: number;
     DONE: number;
+  };
+  tasksByPriority: {
+    LOW: number;
+    MEDIUM: number;
+    HIGH: number;
+    URGENT: number;
   };
   upcomingTasks: {
     id: string;
@@ -122,6 +130,27 @@ export default function Dashboard() {
                 <p className="text-xs text-slate-500 dark:text-slate-500 mt-1.5 font-medium">
                   Completed
                 </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5">
+                <h2 className="text-slate-900 dark:text-white font-semibold text-base mb-1">
+                  Task Status
+                </h2>
+                <p className="text-slate-500 text-xs mb-2">
+                  Breakdown of your assigned tasks
+                </p>
+                <TaskStatusChart data={data.tasksByStatus} />
+              </div>
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5">
+                <h2 className="text-slate-900 dark:text-white font-semibold text-base mb-1">
+                  Priority Distribution
+                </h2>
+                <p className="text-slate-500 text-xs mb-2">
+                  Your tasks by priority level
+                </p>
+                <PriorityChart data={data.tasksByPriority} />
               </div>
             </div>
 
