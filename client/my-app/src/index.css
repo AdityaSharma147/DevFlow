@@ -1,2 +1,100 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: "Space Grotesk", sans-serif;
+  --font-plex: "IBM Plex Sans", sans-serif;
+  --font-plex-mono: "IBM Plex Mono", monospace;
+  --color-ink: #0b1120;
+  --color-surface: #111c33;
+}
+
+@keyframes hero-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-card {
+  animation: hero-card-in 420ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-card {
+    animation: none;
+  }
+}
+
+@keyframes drag-ghost {
+  0%,
+  8% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 0;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+  }
+  14% {
+    opacity: 1;
+  }
+  22% {
+    transform: translate(2%, -6%) rotate(-3deg) scale(1.04);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.15);
+  }
+  48% {
+    transform: translate(108%, -4%) rotate(2deg) scale(1.04);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.15);
+  }
+  58% {
+    transform: translate(108%, 2%) rotate(0deg) scale(1);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+  }
+  64%,
+  92% {
+    transform: translate(108%, 2%) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(108%, 2%) rotate(0deg) scale(1);
+  }
+}
+.drag-ghost {
+  animation: drag-ghost 5.5s ease-in-out infinite;
+}
+
+@keyframes drop-zone-pulse {
+  0%,
+  18% {
+    border-color: transparent;
+    background-color: transparent;
+  }
+  48%,
+  58% {
+    border-color: rgb(45 212 191 / 0.5);
+    background-color: rgb(45 212 191 / 0.08);
+  }
+  70%,
+  100% {
+    border-color: transparent;
+    background-color: transparent;
+  }
+}
+.drop-zone {
+  animation: drop-zone-pulse 5.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drag-ghost,
+  .drop-zone {
+    animation: none;
+  }
+  .drag-ghost {
+    opacity: 0;
+  }
+}

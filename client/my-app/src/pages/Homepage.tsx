@@ -4,7 +4,7 @@ import CTA from "../components/landing/CTA";
 
 export default function LandingPage() {
   return (
-    <div className="bg-slate-100 dark:bg-slate-950 min-h-screen">
+    <div className="font-plex bg-slate-50 dark:bg-ink min-h-screen">
       <Hero />
       <Features />
       <CTA />

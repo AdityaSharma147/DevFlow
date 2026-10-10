@@ -1,16 +1,17 @@
 import { Link } from "react-router-dom";
 import { Sun, Moon } from "lucide-react";
+import { FaGithub } from "react-icons/fa";
 import { useTheme } from "../../lib/ThemeContext";
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <nav className="w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+    <nav className="w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-ink/80 backdrop-blur sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link
           to="/"
-          className="text-xl font-bold text-slate-900 dark:text-white"
+          className="font-display text-xl font-semibold text-slate-900 dark:text-white"
         >
           Dev<span className="text-teal-500 dark:text-teal-400">Flow</span>
         </Link>
@@ -23,10 +24,13 @@ export default function Navbar() {
             Features
           </a>
           <a
-            href="#how-it-works"
-            className="hover:text-slate-900 dark:hover:text-white transition"
+            href="https://github.com/AdityaSharma147/DevFlow"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1.5 hover:text-slate-900 dark:hover:text-white transition"
           >
-            How it works
+            <FaGithub size={15} />
+            GitHub
           </a>
         </div>
 
